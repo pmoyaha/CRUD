@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="IRIS" version="26" zv="IRIS for Windows (x86-64) 2020.1.1 (Build 408U)" ts="2021-03-31 10:05:27">
+<Class name="User.DeleteOperation">
+<Super>Ens.BusinessOperation</Super>
+<TimeChanged>65833,58534.209816</TimeChanged>
+<TimeCreated>65833,57881.051388</TimeCreated>
+
+<Parameter name="INVOCATION">
+<Default>Queue</Default>
+</Parameter>
+
+<Method name="Delete">
+<FormalSpec>pRequest:User.DeleteRequest,*pResponse:User.DeleteResponse</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	set sc = $$$OK
+	//set pResponse = ##class(User.DeleteResponse).%New()
+	
+	try{
+		set pResponse = ##class(User.DeleteResponse).%New()
+		set sql = "DELETE FROM SQLUser.ValiDatabase WHERE Name = ?"
+		set statement = ##class(%SQL.Statement).%New()
+		set sc = statement.%Prepare(sql)
+		set person = statement.%Execute(pRequest.Name)
+		
+}
+ catch ex{
+	set sc = ex.AsStatus()
+	}
+	return sc
+]]></Implementation>
+</Method>
+
+<XData name="MessageMap">
+<Data><![CDATA[
+<MapItems>
+	<MapItem MessageType="User.DeleteRequest"> 
+		<Method>Delete</Method>
+	</MapItem>
+</MapItems>
+]]></Data>
+</XData>
+</Class>
+
+
+<Class name="User.DeleteRequest">
+<Super>Ens.Request,User.ValidPerson</Super>
+<TimeChanged>65833,57388.20097</TimeChanged>
+<TimeCreated>65833,56897.853837</TimeCreated>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DefaultData>DeleteRequestDefaultData</DefaultData>
+<Data name="DeleteRequestDefaultData">
+<Structure>listnode</Structure>
+<Subscript>"DeleteRequest"</Subscript>
+<Value name="1">
+<Value>Name</Value>
+</Value>
+<Value name="2">
+<Value>Surname</Value>
+</Value>
+<Value name="3">
+<Value>Gender</Value>
+</Value>
+<Value name="4">
+<Value>Race</Value>
+</Value>
+<Value name="5">
+<Value>Age</Value>
+</Value>
+<Value name="6">
+<Value>DOB</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="User.DeleteResponse">
+<Super>Ens.Response,User.ValidPerson</Super>
+<TimeChanged>65833,58464.099456</TimeChanged>
+<TimeCreated>65833,56942.699642</TimeCreated>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DefaultData>DeleteResponseDefaultData</DefaultData>
+<Data name="DeleteResponseDefaultData">
+<Subscript>"DeleteResponse"</Subscript>
+<Value name="1">
+<Value>Name</Value>
+</Value>
+<Value name="2">
+<Value>Surname</Value>
+</Value>
+<Value name="3">
+<Value>Gender</Value>
+</Value>
+<Value name="4">
+<Value>Race</Value>
+</Value>
+<Value name="5">
+<Value>Age</Value>
+</Value>
+<Value name="6">
+<Value>DOB</Value>
+</Value>
+<Value name="7">
+<Value>Deleted</Value>
+</Value>
+</Data>
+</Storage>
+
+<UDLText name="T">
+<Content><![CDATA[
+// Property Deleted As %String;
+
+]]></Content>
+</UDLText>
+</Class>
+
+
+<Class name="User.Insert">
+<Super>Ens.Production</Super>
+<TimeChanged>65834,35761.221659</TimeChanged>
+<TimeCreated>65833,46510.131936</TimeCreated>
+
+<XData name="ProductionDefinition">
+<Data><![CDATA[
+<Production Name="User.Insert" TestingEnabled="true" LogGeneralTraceEvents="false">
+  <Description></Description>
+  <ActorPoolSize>2</ActorPoolSize>
+  <Item Name="Vali" Category="" ClassName="User.ValiOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  <Item Name="Select" Category="" ClassName="User.SelectOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  <Item Name="Update" Category="" ClassName="User.UpdateOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  <Item Name="Delete" Category="" ClassName="User.DeleteOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+</Production>
+]]></Data>
+</XData>
+</Class>
+
+
+<Class name="User.Person">
+<Super>%Persistent</Super>
+<TimeChanged>65833,47416.136277</TimeChanged>
+<TimeCreated>65833,47413.382664</TimeCreated>
+
+<Property name="Name">
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Surname">
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Gender">
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Race">
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Age">
+<Type>%Integer</Type>
+</Property>
+
+<Property name="DOB">
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DataLocation>^User.PersonD</DataLocation>
+<DefaultData>PersonDefaultData</DefaultData>
+<IdLocation>^User.PersonD</IdLocation>
+<IndexLocation>^User.PersonI</IndexLocation>
+<StreamLocation>^User.PersonS</StreamLocation>
+<Data name="PersonDefaultData">
+<Structure>listnode</Structure>
+<Subscript/>
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Name</Value>
+</Value>
+<Value name="3">
+<Value>Surname</Value>
+</Value>
+<Value name="4">
+<Value>Gender</Value>
+</Value>
+<Value name="5">
+<Value>Race</Value>
+</Value>
+<Value name="6">
+<Value>Age</Value>
+</Value>
+<Value name="7">
+<Value>DOB</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="User.SelectOperation">
+<Super>Ens.BusinessOperation</Super>
+<TimeChanged>65833,54372.499944</TimeChanged>
+<TimeCreated>65833,53371.472832</TimeCreated>
+
+<Parameter name="INVOCATION">
+<Default>Queue</Default>
+</Parameter>
+
+<Method name="SelectPerson">
+<FormalSpec>pRequest:User.SelectRequest,*pResponse:User.SelectResponse</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	set sc = $$$OK
+	set pResponse = ##class(User.SelectResponse).%New()
+	
+	try{
+		set sql = "SELECT * FROM SQLUser.ValiDatabase WHERE Name = ?"
+		set statement = ##class(%SQL.Statement).%New()
+		set sc = statement.%Prepare(sql)
+		set person = statement.%Execute(pRequest.Name)
+		
+		while (person.%Next() '= 0){
+			set pResponse.Status = "Welcome"
+			set pResponse.Name = person.Name
+			set pResponse.Surname = person.Surname
+			set pResponse.Gender = person.Gender
+			set pResponse.Race = person.Race
+			set pResponse.Age = person.Age
+			set pResponse.DOB = person.DOB
+		}
+}
+	catch ex{
+	set sc = ex.AsStatus()
+	}
+	return sc
+]]></Implementation>
+</Method>
+
+<XData name="MessageMap">
+<Data><![CDATA[
+<MapItems>
+	 <MapItem MessageType="SelectRequest">
+	 <Method>SelectPerson</Method>
+	 </MapItem>
+	 </MapItems>
+]]></Data>
+</XData>
+</Class>
+
+
+<Class name="User.SelectRequest">
+<Super>User.ValidPerson</Super>
+<TimeChanged>65833,52615.971623</TimeChanged>
+<TimeCreated>65833,52613.618225</TimeCreated>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+</Storage>
+</Class>
+
+
+<Class name="User.SelectResponse">
+<Super>User.ValidPerson</Super>
+<TimeChanged>65833,54352.97824</TimeChanged>
+<TimeCreated>65833,52552.63733</TimeCreated>
+
+<Property name="Status">
+<Type>%String</Type>
+</Property>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DefaultData>SelectResponseDefaultData</DefaultData>
+<Data name="SelectResponseDefaultData">
+<Subscript>"SelectResponse"</Subscript>
+<Value name="1">
+<Value>Status</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="User.UpdateOperation">
+<Super>Ens.BusinessOperation</Super>
+<TimeChanged>65833,56761.133074</TimeChanged>
+<TimeCreated>65833,55253.643947</TimeCreated>
+
+<Parameter name="INVOCATION">
+<Default>Queue</Default>
+</Parameter>
+
+<Method name="UpdatePerson">
+<FormalSpec>pRequest:User.UpdateRequest,*pResponse:User.UpdateResponse</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	set sc = $$$OK
+	set pResponse = ##class(User.UpdateResponse).%New()
+	
+	try{
+		set sql = "UPDATE SQLUser.ValiDatabase set Surname = 'moyaha' WHERE Name = ?"
+		set statement = ##class(%SQL.Statement).%New()
+		set sc = statement.%Prepare(sql)
+		set person = statement.%Execute(pRequest.Name)
+		
+		if sc = $$$OK{
+			set pResponse.Okay = "Success"
+		}
+	}
+	catch ex{
+	set sc = ex.AsStatus()
+	}
+	return sc
+]]></Implementation>
+</Method>
+
+<XData name="MessageMap">
+<Data><![CDATA[
+<MapItems>
+	 <MapItem MessageType="UpdateRequest">
+	 <Method>UpdatePerson</Method>
+	 </MapItem>
+	 </MapItems>
+]]></Data>
+</XData>
+</Class>
+
+
+<Class name="User.UpdateRequest">
+<Super>User.ValidPerson</Super>
+<TimeChanged>65833,54466.693145</TimeChanged>
+<TimeCreated>65833,54465.358579</TimeCreated>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+</Storage>
+</Class>
+
+
+<Class name="User.UpdateResponse">
+<Super>User.ValidPerson</Super>
+<TimeChanged>65833,55311.446665</TimeChanged>
+<TimeCreated>65833,54524.478025</TimeCreated>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DefaultData>UpdateResponseDefaultData</DefaultData>
+<Data name="UpdateResponseDefaultData">
+<Structure>listnode</Structure>
+<Subscript>"UpdateResponse"</Subscript>
+<Value name="1">
+<Value>Okay</Value>
+</Value>
+</Data>
+</Storage>
+
+<Property name="Okay">
+<Type>%String</Type>
+</Property>
+</Class>
+
+
+<Class name="User.ValiDatabase">
+<SqlTableName>ValiDatabase</SqlTableName>
+<Super>%Persistent,%Populate,User.ValidPerson</Super>
+<TimeChanged>65833,51768.574017</TimeChanged>
+<TimeCreated>65833,35356.239973</TimeCreated>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DataLocation>^User.ValiDatabaseD</DataLocation>
+<DefaultData>ValiDatabaseDefaultData</DefaultData>
+<IdLocation>^User.ValiDatabaseD</IdLocation>
+<IndexLocation>^User.ValiDatabaseI</IndexLocation>
+<StreamLocation>^User.ValiDatabaseS</StreamLocation>
+<Data name="ValiDatabaseDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Name</Value>
+</Value>
+<Value name="3">
+<Value>Surname</Value>
+</Value>
+<Value name="4">
+<Value>Gender</Value>
+</Value>
+<Value name="5">
+<Value>Race</Value>
+</Value>
+<Value name="6">
+<Value>Age</Value>
+</Value>
+<Value name="7">
+<Value>DOB</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="User.ValiOperation">
+<Super>Ens.BusinessOperation</Super>
+<TimeChanged>65834,35684.954977</TimeChanged>
+<TimeCreated>65833,35643.485853</TimeCreated>
+
+<Parameter name="INVOCATION">
+<Default>Queue</Default>
+</Parameter>
+
+<Method name="InPerson">
+<FormalSpec>pRequest:User.ValidRequest,*pResponse:User.ValiResponse</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	set sc = $$$OK
+	set Data = ##class(User.ValiDatabase).%New()
+	set pResponse = ##class(User.ValiResponse).%New()
+	
+	set Valid = ##class(User.Validate).%New()
+	if (Valid.Validate(pRequest) = 1){
+		
+		if (Valid.CheckDOB(pRequest) = 1){
+			set age = Valid.CalculateDOB(pRequest)
+	
+			try{
+				set sql = "INSERT INTO SQLUser.ValiDatabase (Name,Surname,Gender,Race,Age,DOB) VALUES(?,?,?,?,?,?)"
+				set statement = ##class(%SQL.Statement).%New()
+				set sc = statement.%Prepare(sql)
+				set person = statement.%Execute(pRequest.Name,pRequest.Surname,pRequest.Gender,pRequest.Race,age,pRequest.DOB)
+				set pResponse.Welcome = "Okay"
+				return sc
+	
+			}catch ex{
+				set sc = ex.AsStatus()
+			}
+		}
+	}
+	set pResponse.Welcome = "Invalid"
+	return sc
+]]></Implementation>
+</Method>
+
+<XData name="MessageMap">
+<Data><![CDATA[
+<MapItems>
+	 <MapItem MessageType="ValidRequest">
+	 <Method>InPerson</Method>
+	 </MapItem>
+	 </MapItems>
+]]></Data>
+</XData>
+</Class>
+
+
+<Class name="User.ValiResponse">
+<Super>User.ValidPerson</Super>
+<TimeChanged>65833,51643.310682</TimeChanged>
+<TimeCreated>65833,35527.849017</TimeCreated>
+
+<Property name="Welcome">
+<Type>%String</Type>
+</Property>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DefaultData>ValiResponseDefaultData</DefaultData>
+<Data name="ValiResponseDefaultData">
+<Structure>listnode</Structure>
+<Subscript>"ValiResponse"</Subscript>
+<Value name="1">
+<Value>Welcome</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="User.ValidPerson">
+<Super>%Persistent,%Populate</Super>
+<TimeChanged>65833,51790.610662</TimeChanged>
+<TimeCreated>65833,35291.264358</TimeCreated>
+
+<Property name="Name">
+<Type>%String</Type>
+</Property>
+
+<Property name="Surname">
+<Type>%String</Type>
+</Property>
+
+<Property name="Gender">
+<Type>%String</Type>
+</Property>
+
+<Property name="Race">
+<Type>%String</Type>
+</Property>
+
+<Property name="Age">
+<Type>%Integer</Type>
+</Property>
+
+<Property name="DOB">
+<Type>%String</Type>
+</Property>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DataLocation>^User.ValidPersonD</DataLocation>
+<DefaultData>ValidPersonDefaultData</DefaultData>
+<IdLocation>^User.ValidPersonD</IdLocation>
+<IndexLocation>^User.ValidPersonI</IndexLocation>
+<StreamLocation>^User.ValidPersonS</StreamLocation>
+<Data name="ValidPersonDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Name</Value>
+</Value>
+<Value name="3">
+<Value>Surname</Value>
+</Value>
+<Value name="4">
+<Value>Gender</Value>
+</Value>
+<Value name="5">
+<Value>Race</Value>
+</Value>
+<Value name="6">
+<Value>Age</Value>
+</Value>
+<Value name="7">
+<Value>DOB</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="User.ValidRequest">
+<Super>User.ValidPerson</Super>
+<TimeChanged>65833,51689.195198</TimeChanged>
+<TimeCreated>65833,35413.553301</TimeCreated>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+</Storage>
+</Class>
+
+
+<Class name="User.Validate">
+<Super>%Persistent</Super>
+<TimeChanged>65834,35754.603907</TimeChanged>
+<TimeCreated>65833,59071.086419</TimeCreated>
+
+<Method name="Validate">
+<FormalSpec>pRequest:User.ValidRequest</FormalSpec>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+	IF ($L(pRequest.Name) = 0){ 
+	return 0
+	}
+	IF ($L(pRequest.Surname) = 0){ 
+	return 0
+	}
+	IF ($L(pRequest.Gender) = 0){ 
+	return 0
+	}
+	IF ($L(pRequest.Race) = 0){ 
+	return 0
+	}
+	//IF $L((pRequest.Age) = 0){ 
+	//return 0
+	//}
+	IF ($L(pRequest.DOB) = 0){ 
+	return 0
+	}
+	return 1
+]]></Implementation>
+</Method>
+
+<Method name="CheckDOB">
+<FormalSpec>pRequest:User.ValidRequest</FormalSpec>
+<ReturnType>%Boolean</ReturnType>
+<Implementation><![CDATA[
+	IF ($L(pRequest.DOB) '= 8){
+		return 0
+		}
+	IF ($NUMBER(pRequest.DOB) = 0){
+		return 0
+		}
+	IF ($L(pRequest.DOB = 8)){
+		return 1
+		}
+	return 1
+]]></Implementation>
+</Method>
+
+<Method name="CalculateDOB">
+<FormalSpec>pRequest:User.ValidRequest</FormalSpec>
+<ReturnType>%Integer</ReturnType>
+<Implementation><![CDATA[
+	set Age = 2021 - $EXTRACT(pRequest.DOB,1,4)
+	return Age
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Storage.Persistent</Type>
+<DataLocation>^User.ValidateD</DataLocation>
+<DefaultData>ValidateDefaultData</DefaultData>
+<IdLocation>^User.ValidateD</IdLocation>
+<IndexLocation>^User.ValidateI</IndexLocation>
+<StreamLocation>^User.ValidateS</StreamLocation>
+<Data name="ValidateDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+</Export>
